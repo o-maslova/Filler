@@ -12,6 +12,7 @@
 
 #ifndef FILLER_H
 # define FILLER_H
+# define ABS(x) ((x) > 0 ? (x) : -(x))
 # include "libft/libft.h"
 
 typedef struct		s_data
@@ -23,8 +24,10 @@ typedef struct		s_data
 	char			**piece;
 	int				x_piece;
 	int				y_piece;
-	int				my_pos[2];
+	int				my_pos[4];
 	int				en_pos[2];
+	int				X;
+	int				Y;
 }					t_data;
 
 #endif
