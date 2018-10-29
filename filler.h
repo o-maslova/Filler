@@ -19,8 +19,8 @@ typedef struct		s_data
 {
 	int				row;
 	int				column;
-	char			player;
-	char			**matrix;
+	unsigned char	player;
+	unsigned char	**matrix;
 	char			**piece;
 	int				x_piece;
 	int				y_piece;
