@@ -20,14 +20,28 @@ typedef struct		s_data
 	int				row;
 	int				column;
 	unsigned char	player;
-	unsigned char	**matrix;
-	char			**piece;
-	int				x_piece;
-	int				y_piece;
+	unsigned char	**mtrx;
+	char			**pc;
+	int				x_pc;
+	int				y_pc;
 	int				my_pos[4];
 	int				en_pos[2];
 	int				X;
 	int				Y;
 }					t_data;
+
+typedef struct		s_check
+{
+	int				i;
+	int				j;
+	int				i_pc;
+	int				j_pc;
+	int				check;
+}					t_check;
+
+void				define_coords(t_data *data);
+int					change_coords(t_data *data, char enemy);
+void				search_position(t_data *data);
+void				print_mtrx(t_data *data);
 
 #endif
