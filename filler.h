@@ -13,14 +13,25 @@
 #ifndef FILLER_H
 # define FILLER_H
 # define ABS(x) ((x) > 0 ? (x) : -(x))
+# define PLAYER data->player
+# define ENEMY data->enemy
 # include "libft/libft.h"
+# include <signal.h>
+
+typedef struct		s_point
+{
+	unsigned char	length;
+	int				isPlayer;
+	int				isEnemy;
+}					t_point;
 
 typedef struct		s_data
 {
 	int				row;
 	int				column;
 	unsigned char	player;
-	unsigned char	**mtrx;
+	unsigned char	enemy;
+	t_point			**mtrx;
 	char			**pc;
 	int				x_pc;
 	int				y_pc;
