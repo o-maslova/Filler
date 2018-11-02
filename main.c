@@ -231,7 +231,6 @@ void	find_min_distance(t_data *data, int dotrow, int dotcol)
 				// dprintf(3, "!dotrow = %d, dotcol = %d!\n!i = %d, j = %d dist = %d!\n", dotrow, dotcol, i, j, dist);
 			}
 		}
-		dprintf(3, "\n");
 	}
 }
 
@@ -300,7 +299,7 @@ void	print_mtrx(t_data *data)
 			else if (data->mtrx[i][j].isPlayer)
 				dprintf(3, "%3dPl", data->mtrx[i][j].length);
 			else
-				dprintf(3, "%3c  ", data->mtrx[i][j].length);
+				dprintf(3, "%3d  ", data->mtrx[i][j].length);
 		}
 		dprintf(3, "\n");
 		i++;
@@ -336,7 +335,7 @@ void	set_data(char *line, t_data *data)
 	line += ft_digitnum(data->row);
 	data->column = ft_atoi(line);
 	data->mtrx = (t_point **)malloc(sizeof(t_point *) * data->row);
-	while (i < data->column)
+	while (i < data->row)
 		data->mtrx[i++] = (t_point *)ft_memalloc(sizeof(t_point) * data->column);
 	dprintf(3, "player = %d, row = %d, column = %d\n", data->player, data->row, data->column);
 }
@@ -361,24 +360,69 @@ void	get_pc(char *str, t_data *data, int fd)
 	dprintf(3, "pc_x = %d, pc_y = %d\n", data->x_pc, data->y_pc);
 }
 
+void	enemy_min_dist(t_data *data, int starrow, int starcol, int player[2])
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < data->row)
+	{
+		j = -1;
+		while (++j < data->column)
+		{
+			if (data->mlx[i][j].isEnemy)
+		}
+	}
+}
+
+void	star_minimal_distance(t_data *data, int starrow, int starcol)
+{
+	int	iter[2];
+
+	iter[0] = -1;
+	while (++iter[0] < data->row)
+	{
+		iter[1] = -1;
+		while (++iter[1] < data->column)
+		{
+			if (data->mlx[iter[0]][iter[1]].isPlayer)
+				enemy_min_dist(data, i, j, iter);
+		}
+	}
+}
+
+void	search_position(t_data *data)
+{
+	int i;
+	int j;
+
+	i = -1;
+	data->min = 255;
+	while (++i < data->x_pc)
+	{
+		j = -1;
+		while (++j < data->y_pc)
+		{
+			if (data->pc[i][j] == '*')
+				star_minimal_distance(data, i, j);
+		}
+	}
+}
+
 void	get_data(char *line, t_data *data, int fd)
 {
 	char	*str1;
 	char	*str2;
 
-	// printf("%s\n", "go here");
-	// get_pc(line + 6, data, fd);
-	// find_enemy(data);
-	// print_mtrx(data);
-	// raise(SIGTSTP);
+	get_pc(line + 6, data, fd);
 	set_distance(data);
-	// search_position(data);
+	search_position(data);
 	// define_coords(data);
 	dprintf(3, "\nDistance\n");
 	print_mtrx(data);
 	// if (data->my_pos[0] < data->en_pos[0])
-	// 	put_down(data);
-	
+	// put_down(data);
 
 	data->X = 0;
 	data->Y = 0;
@@ -400,7 +444,6 @@ int main(void)
 	char		*ptr;
 	t_data		*data;
 
-	raise(SIGTSTP);
 	data = (t_data *)malloc(sizeof(t_data));
 	fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
 	i = 0;
