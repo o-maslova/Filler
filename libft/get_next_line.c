@@ -42,10 +42,8 @@ t_str	*find_fd(t_str **list, int fd)
 
 t_str	*lstnew(t_str **list, int fd)
 {
-	t_str *tmp;
 	t_str *node;
 
-	tmp = NULL;
 	node = NULL;
 	if (!(*list))
 	{

@@ -16,11 +16,9 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
 	t_list	*tmp;
 	t_list	*tmp2;
-	t_list	*elem;
 
 	tmp = NULL;
 	tmp2 = NULL;
-	elem = NULL;
 	if (lst)
 	{
 		tmp = lst;
