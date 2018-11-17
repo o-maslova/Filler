@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "filler.h"
 
 void	clear_mtrx(t_data *data, int *counter)
@@ -17,6 +16,16 @@ void	clear_mtrx(t_data *data, int *counter)
 	*counter = 0;
 }
 
+void	clear_list(t_coords **list)
+{
+	while (*list)
+	{
+		free(*list);
+		*list = (*list)->next;
+	}
+	*list = NULL;
+}
+
 void	find_min_distance(t_data *data, int dotrow, int dotcol)
 {
 	int i;
@@ -29,13 +38,14 @@ void	find_min_distance(t_data *data, int dotrow, int dotcol)
 		j = -1;
 		while (++j < data->column)
 		{
-			dist = ABS(dotrow - i) + ABS(dotcol - j);
+			dist = ABS(i - dotrow) + ABS(j - dotcol);
+			data->mtrx[i][j].length = dist;
 			//dprintf(3, "dist = %d    ", dist);
-			if (data->mtrx[i][j].isEnemy && dist < data->mtrx[dotrow][dotcol].length)
-			{
-				data->mtrx[dotrow][dotcol].length = dist;
-				// dprintf(3, "!dotrow = %d, dotcol = %d!\n!i = %d, j = %d dist = %d!\n", dotrow, dotcol, i, j, dist);
-			}
+			// if (data->mtrx[i][j].isEnemy && dist < data->mtrx[dotrow][dotcol].length)
+			// {
+			// 	data->mtrx[dotrow][dotcol].length = dist;
+			// 	// dprintf(3, "!dotrow = %d, dotcol = %d!\n!i = %d, j = %d dist = %d!\n", dotrow, dotcol, i, j, dist);
+			// }
 		}
 	}
 }
@@ -44,13 +54,19 @@ void	set_distance(t_data *data)
 {
 	int i;
 	int j;
+	int flag;
 
 	i = -1;
+	flag = 0;
 	while (++i < data->row)
 	{
 		j = -1;
 		while (++j < data->column)
-			find_min_distance(data, i, j);
+			if (data->mtrx[i][j].isEnemy && flag == 0)
+			{
+				find_min_distance(data, i, j);
+				flag = 1;
+			}
 	}
 }
 
@@ -88,76 +104,6 @@ void	print_mtrx(t_data *data)
 	}
 }
 
-int		set_mtrx(char *line, t_data *data, int i)
-{
-	int j;
-	
-	j = 0;
-	while (j < data->column)
-	{
-		*line = ft_tolower(*line);
-		data->mtrx[i][j].length = 255;//(unsigned char)*line++;
-		if (*line + 100 == data->player)
-			data->mtrx[i][j].isPlayer = 1;
-		else if (*line + 100 == data->enemy)
-			data->mtrx[i][j].isEnemy = 1;
-		++line;
-		++j;
-	}
-	return (++i);
-}
-
-void	set_data(char *line, t_data *data)
-{
-	int i;
-
-	i = 0;
-	line += 8;
-	data->row = ft_atoi(line);
-	line += ft_digitnum(data->row);
-	data->column = ft_atoi(line);
-	data->mtrx = (t_point **)malloc(sizeof(t_point *) * data->row);
-	while (i < data->row)
-		data->mtrx[i++] = (t_point *)ft_memalloc(sizeof(t_point) * data->column);
-	dprintf(3, "player = %d, row = %d, column = %d\n", data->player, data->row, data->column);
-}
-
-void	get_pc(char *str, t_data *data, int fd)
-{
-	int		i;
-	char	*line;
-
-	i = 0;
-	data->x_pc = ft_atoi(str);
-	data->y_pc = ft_atoi(str + ft_digitnum(data->x_pc));
-	data->pc = (char **)malloc(sizeof(char *) * data->x_pc);
-	while (i < data->x_pc)
-	{
-		get_next_line(fd, &line);
-		data->pc[i] = (char *)malloc(sizeof(char) * data->y_pc);
-		data->pc[i] = ft_strncpy(data->pc[i], line, data->y_pc);
-		i++;
-		free(line);
-	}
-	dprintf(3, "pc_x = %d, pc_y = %d\n", data->x_pc, data->y_pc);
-}
-
-// void	enemy_min_dist(t_data *data, int starrow, int starcol, int player[2])
-// {
-// 	int		i;
-// 	int		j;
-
-// 	i = -1;
-// 	while (++i < data->row)
-// 	{
-// 		j = -1;
-// 		while (++j < data->column)
-// 		{
-// 			if (data->mlx[i][j].isEnemy)
-// 		}
-// 	}
-// }
-
 // int		up(t_data *data, int row, int col)
 // {
 // 	int i;
@@ -171,7 +117,7 @@ void	get_pc(char *str, t_data *data, int fd)
 // 		j = -1;
 // 		while (++j < data->y_pc)
 // 		{
-// 			if (data->pc[i][j] == '*' && starAmount <= 1)
+// 			if (data->pc[i][j] == '*' &&s starAmount <= 1)
 // 			{
 // 				if (data->data->mtrx[row][col].isPlayer)
 // 					starAmount++;
@@ -188,127 +134,24 @@ void	get_pc(char *str, t_data *data, int fd)
 // 	return (res);
 // }
 
-int		down(t_data *data, int row, int col)
-{
-	int i;
-	int j;
-	int res;
-	int starAmount;
-
-	i = -1;
-	res = 0;
-	starAmount = 0;
-	while (++i < data->x_pc)
-	{
-		j = -1;
-		while (++j < data->y_pc)
-		{
-			if (data->pc[i][j] == '*' && starAmount <= 1)
-			{
-				if (data->mtrx[row][col].isPlayer)
-					starAmount++;
-				if (!data->mtrx[row][col].isEnemy)
-					res += data->mtrx[row][col].length;
-				col++;
-			}
-			else if (starAmount > 1)
-			{
-				dprintf(3, "there starAmount = %d\n", starAmount);
-				return (0);
-			}
-			j++;
-		}
-		row++;
-	}
-	dprintf(3, "res = %d, starAmount = %d\n", res, starAmount);
-	return (res);
-}
-
-int		star_minimal_distance(t_data *data, int row, int col, t_coords *coords)
-{
-	int i;
-	int j;
-	int res;
-	int tmp;
-
-	i = -1;
-	res = 255;
-	while (++i < data->x_pc)
-	{
-		j = -1;
-		while (++j < data->y_pc)
-		{
-			if (data->pc[i][j] == '*')
-			{
-				if ((tmp = down(data, row, col)) < res)
-				{
-					coords->x = row + i;
-					coords->y = col - j;
-					res = tmp;
-				}
-				// if ((tmp = down(data, row - data->x_pc - 1, col)) < res)
-				// {
-				// 	coords->x = row - i;
-				// 	coords->y = col - j;
-				// 	res = tmp;
-				// }
-			}
-		}
-	}
-	dprintf(3, "row = %d, column = %d\n", row, col);
-	dprintf(3, "res = %d, x = %d, y = %d\n", res, coords->x, coords->y);
-	return (res);
-}
-
-void	search_position(t_data *data)
-{
-	int i;
-	int j;
-	int min;
-	int tmp;
-	t_coords *tmp_coords;
-
-	i = -1;
-	min = 255;
-	data->coords = (t_coords *)malloc(sizeof(t_coords));
-	tmp_coords = (t_coords *)malloc(sizeof(t_coords));
-	while (++i < data->row)
-	{
-		j = -1;
-		while (++j < data->column)
-		{
-			if (data->mtrx[i][j].isPlayer)
-			{
-				if ((tmp = star_minimal_distance(data, i, j, tmp_coords)) < min)
-				{
-					min = tmp;
-					data->coords = tmp_coords;
-				}
-				if (min == 0)
-				{
-					data->coords->x = 0;
-					data->coords->y = 0;
-				}
-			}
-		}
-	}
-}
-
 void	get_data(char *line, t_data *data, int fd)
 {
 	char	*str1;
 	char	*str2;
 	int		x;
 	int		y;
+	t_coords *list;
 
+	list = NULL;
 	get_pc(line + 6, data, fd);
 	set_distance(data);
-	search_position(data);
+	print_mtrx(data);
+	search_position(data, list);
+	clear_list(&list);
 	x = data->coords->x;
 	y = data->coords->y;
 	// define_coords(data);
-	dprintf(3, "\nDistance\n");
-	print_mtrx(data);
+	// print_mtrx(data);
 	// if (data->my_pos[0] < data->en_pos[0])
 	// put_down(data);
 
@@ -324,7 +167,6 @@ void	get_data(char *line, t_data *data, int fd)
 int main(void)
 {
 	int			i;
-	int			tmp;
 	int			fd;
 	char		*line;
 	char		*ptr;

@@ -16,7 +16,7 @@
 # define PLAYER data->player
 # define ENEMY data->enemy
 # include "libft/libft.h"
-# include <signal.h>
+#include <stdio.h>
 
 typedef struct		s_point
 {
@@ -29,6 +29,8 @@ typedef struct		s_coords
 {
 	int				x;
 	int				y;
+	int				sum;
+	struct s_coords	*next;
 }					t_coords;
 
 typedef struct		s_data
@@ -44,9 +46,12 @@ typedef struct		s_data
 	t_coords		*coords;
 }					t_data;
 
-void				define_coords(t_data *data);
-int					change_coords(t_data *data, char enemy);
-void				search_position(t_data *data);
-void				print_mtrx(t_data *data);
+int					down(t_data *data, int row, int col, int res);
+void				star_min_dist(t_data *data, int row, int col, t_coords **nw);
+void				search_position(t_data *data, t_coords *list);
+int					set_mtrx(char *line, t_data *data, int i);
+void				set_data(char *line, t_data *data);
+void				get_pc(char *str, t_data *data, int fd);
+
 
 #endif
