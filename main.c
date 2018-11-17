@@ -1,215 +1,21 @@
 #include <stdio.h>
 #include "filler.h"
 
-// void	clear_mtrx(t_data *data, int *counter)
-// {
-// 	int i;
-// 	int j;
+void	clear_mtrx(t_data *data, int *counter)
+{
+	int i;
+	int j;
 
-// 	i = 0;
-// 	while (i < data->row)
-// 	{
-// 		j = 0;
-// 		while (j < data->column)
-// 			data->mtrx[i][j++] = '.';
-// 		i++;
-// 	}
-// 	data->my_pos[0] = 0;
-// 	data->my_pos[1] = 0;
-// 	*counter = 0;
-// }
-
-// void	search_position(t_data *data)
-// {
-// 	int i;
-// 	int j;
-// 	int first;
-// 	int tbp[2]; // the best position to put the pc; (x, y) coordinates
-
-// 	first = 1;
-// 	i = data->my_pos[2];
-// 	tbp[0] = data->my_pos[2];
-// 	tbp[1] = data->my_pos[3];
-// 	dprintf(3, "first data->mtrx[tbp[0]][tbp[1]] = %d\n", data->mtrx[tbp[0]][tbp[1]]);
-// 	while (i < data->row)
-// 	{
-// 		j = -1;
-// 		while (++j < data->column)
-// 		{
-// 			if (data->mtrx[i][j] == data->player && data->mtrx[i + 1][j] != data->player)
-// 				if (data->mtrx[i + 1][j] - 48 < data->mtrx[i][j])
-// 				{
-// 					tbp[0] = i;
-// 					tbp[1] = j;
-// 				}
-// 			if (data->mtrx[i][j] == data->player && data->mtrx[i][j + 1] != data->player)
-// 				if (data->mtrx[i][j + 1] - 48 < data->mtrx[i + 1][j])
-// 				{
-// 					tbp[0] = i;
-// 					tbp[1] = j;
-// 				}
-// 			if (data->mtrx[i][j] == data->player && data->mtrx[i][j - 1] != data->player)
-// 				if (data->mtrx[i][j - 1] - 48 < data->mtrx[i][j + 1])
-// 				{
-// 					tbp[0] = i;
-// 					tbp[1] = j;
-// 				}
-// 		}
-// 		i++;
-// 	}
-// 	dprintf(3, "changed tbp[0] = %d, tbp[1] = %d\n", tbp[0], tbp[1]);
-// 	if (tbp[0] == data->my_pos[2] && tbp[1] == data->my_pos[3])
-// 	{
-// 		tbp[0] = data->my_pos[0];
-// 		tbp[1] = data->my_pos[1];
-// 	}
-// 	data->my_pos[0] = tbp[0];
-// 	data->my_pos[1] = tbp[1];
-// 	// define_coords(data);
-// }
-
-// void	init(t_check *tmp, int x, int y)
-// {
-// 	tmp->i = x - 1;
-// 	tmp->j = y;
-// 	tmp->i_pc = 0;
-// 	tmp->j_pc = 0;
-// 	tmp->check = 0;
-// }
-
-// int		change_coords(t_data *data, char enemy)
-// {
-// 	int match;
-// 	t_check *tmp;
-
-// 	tmp = (t_check *)malloc(sizeof(t_check));
-// 	init(tmp, data->X, data->Y);
-// 	match = 0;
-// 	dprintf(3, "i = %d, j = %d\n", tmp->i, tmp->j);
-// 	while (tmp->i_pc < data->x_pc)
-// 	{
-// 		tmp->i++;
-// 		tmp->j_pc = 0;
-// 		tmp->j = data->Y;
-// 		while (tmp->j_pc < data->y_pc)
-// 		{
-// 			if (match == 0 && data->pc[tmp->i_pc][tmp->j_pc] == '*' &&
-// 				data->mtrx[tmp->i][tmp->j] == data->player)
-// 			{
-// 				dprintf(3, "match = 1\n");
-// 				match = 1;
-// 				// tmp->j_pc++;
-// 			}
-// 			else if (match == 1 && data->pc[tmp->i_pc][tmp->j_pc] == '*' &&
-// 				(data->mtrx[tmp->i][tmp->j] == data->player || data->mtrx[tmp->i][tmp->j] == enemy))
-// 			{
-// 				dprintf(3, "match = -1\n");
-// 				match = -1;
-// 				return (0);
-// 			}
-// 			tmp->j_pc++;
-// 			tmp->j++;
-// 		}
-// 		tmp->i_pc++;
-// 	}
-// 	if (match == 0)
-// 		return (0);
-// 	return (1);
-// }
-
-// int		down(t_data *data, char enemy)
-// {
-// 	int i;
-// 	int j;
-
-// 	i = -1;
-// 	enemy = 'x';
-// 	while (++i < data->x_pc)
-// 	{
-// 		j = -1;
-// 		while (++j < data->y_pc && data->pc[i][j] == '.')
-// 			data->Y--;
-// 		if (data->pc[i][j] == '*' && i != data->x_pc - 1)
-// 		{
-// 			if (data->x_pc != 1 && j == 0 && data->pc[i + 1][j] == '*'
-// 				&& data->mtrx[data->X + 1][data->Y] == data->player)
-// 			{
-// 				i++;
-// 				data->X++;
-// 			}
-// 			break ;
-// 		}
-// 		if (j == data->y_pc - 1)
-// 		{
-// 			data->X--;
-// 			data->Y += j;
-// 		}
-// 	}
-// 	dprintf(3, "after down data->X = %d, data->Y = %d\n", data->X, data->Y);
-// 	if (change_coords(data, enemy))
-// 	// if (data->mtrx[data->X + data->x_pc - 1][data->Y + data->y_pc - 1] != data->player
-// 	// 	&& data->mtrx[data->X + data->x_pc - 1][data->Y + data->y_pc - 1] != enemy &&
-// 	// 	data->mtrx[data->X + data->x_pc - 1][data->Y] != data->player && data->mtrx[data->X + data->x_pc - 1][data->Y] != enemy)
-// 		return (1);
-// 	return (0);
-// }
-
-// int		up(t_data *data, char enemy)
-// {
-// 	data->X = data->my_pos[0] - data->x_pc + 1;
-// 	data->Y = data->my_pos[1];
-// 	if (data->mtrx[data->X][data->Y] == data->player &&
-// 		data->mtrx[data->X][data->Y + data->y_pc - 1] != data->player
-// 		&& data->mtrx[data->X][data->Y + data->y_pc - 1] != enemy)
-// 		return (1);
-// 	else
-// 	{
-// 		data->Y = 0;
-// 		while (data->mtrx[data->X][data->Y] != data->player && data->Y)
-// 		{
-// 			if (change_coords(data, enemy))
-// 				return (1);
-// 			data->Y++;
-// 			if (data->Y == data->column)
-// 			{
-// 				dprintf(3, "nulling\n");
-// 				data->Y = 0;
-// 				data->X--;
-// 			}
-// 		}
-// 	}
-// 	dprintf(3, "after up data->X = %d, data->Y = %d\n", data->X, data->Y);
-// 	data->mtrx[data->X][data->Y - 1] = 255;
-// 	return (0);
-// }
-
-// void	define_coords(t_data *data)
-// {
-// 	char enemy;
-
-// 	enemy = data->player == 'o' ? 'x' : 'o';
-// 	data->X = data->my_pos[0];
-// 	data->Y = data->my_pos[1];
-// 	if (data->X + data->x_pc - 1 >= data->row || data->Y + data->y_pc - 1 >= data->column)
-// 	{
-// 		data->X = data->my_pos[2];
-// 		data->Y = data->my_pos[3];
-// 	}
-// 	dprintf(3, "data->X = %d, data->Y = %d\n", data->X, data->Y);
-// 	if (!down(data, enemy))
-// 	{
-// 		if (!up(data, enemy))
-// 		{
-			
-// 			data->X = data->my_pos[0];
-// 			data->Y = data->my_pos[1];
-// 			data->mtrx[data->X][data->Y + 1] = 255;
-// 			search_position(data);
-// 			return (define_coords(data));
-// 		}
-// 	}
-// 	dprintf(3, "data->X = %d, data->Y = %d\n", data->X, data->Y);
-// }
+	i = 0;
+	while (i < data->row)
+	{
+		j = 0;
+		while (j < data->column)
+			data->mtrx[i][j++].length = 0;
+		i++;
+	}
+	*counter = 0;
+}
 
 void	find_min_distance(t_data *data, int dotrow, int dotcol)
 {
@@ -247,30 +53,6 @@ void	set_distance(t_data *data)
 			find_min_distance(data, i, j);
 	}
 }
-
-// void	find_enemy(t_data *data)
-// {
-// 	int i;
-// 	int j;
-// 	int check;
-
-// 	i = -1;
-// 	check = 0;
-// 	while (++i < data->row)
-// 	{
-// 		j = -1;
-// 		while (++j < data->column)
-// 		{
-// 			if ((data->mtrx[i][j].isEnemy == 1) ||
-// 			{
-// 				data->en_pos[0] = i;
-// 				data->en_pos[1] = j;
-// 				// data->mtrx[i][j] = 0;
-// 				return  ;
-// 			}
-// 		}
-// 	}
-// }
 
 void	ft_arrdel(char **arr, int row)
 {
@@ -360,52 +142,154 @@ void	get_pc(char *str, t_data *data, int fd)
 	dprintf(3, "pc_x = %d, pc_y = %d\n", data->x_pc, data->y_pc);
 }
 
-void	enemy_min_dist(t_data *data, int starrow, int starcol, int player[2])
-{
-	int		i;
-	int		j;
+// void	enemy_min_dist(t_data *data, int starrow, int starcol, int player[2])
+// {
+// 	int		i;
+// 	int		j;
 
-	i = -1;
-	while (++i < data->row)
-	{
-		j = -1;
-		while (++j < data->column)
-		{
-			if (data->mlx[i][j].isEnemy)
-		}
-	}
-}
+// 	i = -1;
+// 	while (++i < data->row)
+// 	{
+// 		j = -1;
+// 		while (++j < data->column)
+// 		{
+// 			if (data->mlx[i][j].isEnemy)
+// 		}
+// 	}
+// }
 
-void	star_minimal_distance(t_data *data, int starrow, int starcol)
-{
-	int	iter[2];
+// int		up(t_data *data, int row, int col)
+// {
+// 	int i;
+// 	int j;
+// 	int starAmount;
 
-	iter[0] = -1;
-	while (++iter[0] < data->row)
-	{
-		iter[1] = -1;
-		while (++iter[1] < data->column)
-		{
-			if (data->mlx[iter[0]][iter[1]].isPlayer)
-				enemy_min_dist(data, i, j, iter);
-		}
-	}
-}
+// 	i = -1;
+// 	starAmount = 0;
+// 	while (++i < data->x_pc)
+// 	{
+// 		j = -1;
+// 		while (++j < data->y_pc)
+// 		{
+// 			if (data->pc[i][j] == '*' && starAmount <= 1)
+// 			{
+// 				if (data->data->mtrx[row][col].isPlayer)
+// 					starAmount++;
+// 				if (!data->mtrx[row][col].isPlayer && !data->mtrx[row][col].isEnemy)
+// 					res += data->mtrx[row][col];
+// 				col++;
+// 			}
+// 			else if (starAmount > 1)
+// 				return (0);
+// 			j++;
+// 		}
+// 		row++;
+// 	}
+// 	return (res);
+// }
 
-void	search_position(t_data *data)
+int		down(t_data *data, int row, int col)
 {
 	int i;
 	int j;
+	int res;
+	int starAmount;
 
 	i = -1;
-	data->min = 255;
+	res = 0;
+	starAmount = 0;
+	while (++i < data->x_pc)
+	{
+		j = -1;
+		while (++j < data->y_pc)
+		{
+			if (data->pc[i][j] == '*' && starAmount <= 1)
+			{
+				if (data->mtrx[row][col].isPlayer)
+					starAmount++;
+				if (!data->mtrx[row][col].isEnemy)
+					res += data->mtrx[row][col].length;
+				col++;
+			}
+			else if (starAmount > 1)
+			{
+				dprintf(3, "there starAmount = %d\n", starAmount);
+				return (0);
+			}
+			j++;
+		}
+		row++;
+	}
+	dprintf(3, "res = %d, starAmount = %d\n", res, starAmount);
+	return (res);
+}
+
+int		star_minimal_distance(t_data *data, int row, int col, t_coords *coords)
+{
+	int i;
+	int j;
+	int res;
+	int tmp;
+
+	i = -1;
+	res = 255;
 	while (++i < data->x_pc)
 	{
 		j = -1;
 		while (++j < data->y_pc)
 		{
 			if (data->pc[i][j] == '*')
-				star_minimal_distance(data, i, j);
+			{
+				if ((tmp = down(data, row, col)) < res)
+				{
+					coords->x = row + i;
+					coords->y = col - j;
+					res = tmp;
+				}
+				// if ((tmp = down(data, row - data->x_pc - 1, col)) < res)
+				// {
+				// 	coords->x = row - i;
+				// 	coords->y = col - j;
+				// 	res = tmp;
+				// }
+			}
+		}
+	}
+	dprintf(3, "row = %d, column = %d\n", row, col);
+	dprintf(3, "res = %d, x = %d, y = %d\n", res, coords->x, coords->y);
+	return (res);
+}
+
+void	search_position(t_data *data)
+{
+	int i;
+	int j;
+	int min;
+	int tmp;
+	t_coords *tmp_coords;
+
+	i = -1;
+	min = 255;
+	data->coords = (t_coords *)malloc(sizeof(t_coords));
+	tmp_coords = (t_coords *)malloc(sizeof(t_coords));
+	while (++i < data->row)
+	{
+		j = -1;
+		while (++j < data->column)
+		{
+			if (data->mtrx[i][j].isPlayer)
+			{
+				if ((tmp = star_minimal_distance(data, i, j, tmp_coords)) < min)
+				{
+					min = tmp;
+					data->coords = tmp_coords;
+				}
+				if (min == 0)
+				{
+					data->coords->x = 0;
+					data->coords->y = 0;
+				}
+			}
 		}
 	}
 }
@@ -414,21 +298,23 @@ void	get_data(char *line, t_data *data, int fd)
 {
 	char	*str1;
 	char	*str2;
+	int		x;
+	int		y;
 
 	get_pc(line + 6, data, fd);
 	set_distance(data);
 	search_position(data);
+	x = data->coords->x;
+	y = data->coords->y;
 	// define_coords(data);
 	dprintf(3, "\nDistance\n");
 	print_mtrx(data);
 	// if (data->my_pos[0] < data->en_pos[0])
 	// put_down(data);
 
-	data->X = 0;
-	data->Y = 0;
-	str1 = ft_itoa(data->X);
-	str2 = ft_itoa(data->Y);
-	dprintf(3, "%d %d\n", data->X, data->Y);
+	str1 = ft_itoa(x);
+	str2 = ft_itoa(y);
+	dprintf(3, "%d %d\n", x, y);
 	str1 = ft_strcat(str1, " ");
 	str2 = ft_strcat(str2, "\n");
 	ft_putstr(ft_strcat(str1, str2));
@@ -447,8 +333,7 @@ int main(void)
 	data = (t_data *)malloc(sizeof(t_data));
 	fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
 	i = 0;
-	tmp = 0;
-	while (get_next_line(0, &line) && tmp == 0)
+	while (get_next_line(0, &line))
 	{
 		if ((ptr = ft_strstr(line, "[./a.out]")))
 		{
@@ -460,7 +345,7 @@ int main(void)
 		if ((ptr = ft_strstr(line, "Piece")))
 		{
 			get_data(ptr, data, 0);
-			// clear_mtrx(data, &i);
+			clear_mtrx(data, &i);
 		}
 		if ((ft_strchr(line, '0') && (ptr = ft_strchr(line, '.'))))
 			i = set_mtrx(ptr, data, i);

@@ -25,6 +25,12 @@ typedef struct		s_point
 	int				isEnemy;
 }					t_point;
 
+typedef struct		s_coords
+{
+	int				x;
+	int				y;
+}					t_coords;
+
 typedef struct		s_data
 {
 	int				row;
@@ -35,20 +41,8 @@ typedef struct		s_data
 	char			**pc;
 	int				x_pc;
 	int				y_pc;
-	int				my_pos[4];
-	int				en_pos[2];
-	int				X;
-	int				Y;
+	t_coords		*coords;
 }					t_data;
-
-typedef struct		s_check
-{
-	int				i;
-	int				j;
-	int				i_pc;
-	int				j_pc;
-	int				check;
-}					t_check;
 
 void				define_coords(t_data *data);
 int					change_coords(t_data *data, char enemy);
