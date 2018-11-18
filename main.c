@@ -16,57 +16,31 @@ void	clear_mtrx(t_data *data, int *counter)
 	*counter = 0;
 }
 
-void	clear_list(t_coords **list)
-{
-	while (*list)
-	{
-		free(*list);
-		*list = (*list)->next;
-	}
-	*list = NULL;
-}
-
-void	find_min_distance(t_data *data, int dotrow, int dotcol)
-{
-	int i;
-	int	j;
-	int	dist;
-
-	i = -1;
-	while (++i < data->row)
-	{
-		j = -1;
-		while (++j < data->column)
-		{
-			dist = ABS(i - dotrow) + ABS(j - dotcol);
-			data->mtrx[i][j].length = dist;
-			//dprintf(3, "dist = %d    ", dist);
-			// if (data->mtrx[i][j].isEnemy && dist < data->mtrx[dotrow][dotcol].length)
-			// {
-			// 	data->mtrx[dotrow][dotcol].length = dist;
-			// 	// dprintf(3, "!dotrow = %d, dotcol = %d!\n!i = %d, j = %d dist = %d!\n", dotrow, dotcol, i, j, dist);
-			// }
-		}
-	}
-}
-
 void	set_distance(t_data *data)
 {
-	int i;
-	int j;
-	int flag;
+	int i[2];
+	int j[2];
+	int dist;
 
-	i = -1;
-	flag = 0;
-	while (++i < data->row)
+	i[0] = -1;
+	while (++i[0] < data->row)
 	{
-		j = -1;
-		while (++j < data->column)
-			if (data->mtrx[i][j].isEnemy && flag == 0)
+		j[0] = -1;
+		while (++j[0] < data->column)
+		{
+			i[1] = -1;
+			while (++i[1] < data->row)
 			{
-				find_min_distance(data, i, j);
-				flag = 1;
+				j[1] = -1;
+				while (++j[1] < data->column)
+				{
+					dist = ABS(i[0] - i[1]) + ABS(j[0] - j[1]);
+					if (data->mtrx[i[1]][j[1]].isEnemy && dist < data->mtrx[i[0]][j[0]].length)
+						data->mtrx[i[0]][j[0]].length = dist;
+				}
 			}
+		}
+			// find_min_distance(data, i, j);
 	}
 }
 
@@ -104,36 +78,6 @@ void	print_mtrx(t_data *data)
 	}
 }
 
-// int		up(t_data *data, int row, int col)
-// {
-// 	int i;
-// 	int j;
-// 	int starAmount;
-
-// 	i = -1;
-// 	starAmount = 0;
-// 	while (++i < data->x_pc)
-// 	{
-// 		j = -1;
-// 		while (++j < data->y_pc)
-// 		{
-// 			if (data->pc[i][j] == '*' &&s starAmount <= 1)
-// 			{
-// 				if (data->data->mtrx[row][col].isPlayer)
-// 					starAmount++;
-// 				if (!data->mtrx[row][col].isPlayer && !data->mtrx[row][col].isEnemy)
-// 					res += data->mtrx[row][col];
-// 				col++;
-// 			}
-// 			else if (starAmount > 1)
-// 				return (0);
-// 			j++;
-// 		}
-// 		row++;
-// 	}
-// 	return (res);
-// }
-
 void	get_data(char *line, t_data *data, int fd)
 {
 	char	*str1;
@@ -150,10 +94,6 @@ void	get_data(char *line, t_data *data, int fd)
 	clear_list(&list);
 	x = data->coords->x;
 	y = data->coords->y;
-	// define_coords(data);
-	// print_mtrx(data);
-	// if (data->my_pos[0] < data->en_pos[0])
-	// put_down(data);
 
 	str1 = ft_itoa(x);
 	str2 = ft_itoa(y);

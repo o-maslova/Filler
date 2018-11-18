@@ -46,12 +46,16 @@ typedef struct		s_data
 	t_coords		*coords;
 }					t_data;
 
-int					down(t_data *data, int row, int col, int res);
-void				star_min_dist(t_data *data, int row, int col, t_coords **nw);
+int					algorithm(t_data *data, int row, int col, int res);
+t_coords			*star_min_dist(t_data *data, int row, int col, t_coords *nw);
 void				search_position(t_data *data, t_coords *list);
 int					set_mtrx(char *line, t_data *data, int i);
 void				set_data(char *line, t_data *data);
 void				get_pc(char *str, t_data *data, int fd);
-
+void       			print_sum(t_coords *list);
+void       			add_node(t_coords **list, t_coords *new_node);
+void				clear_list(t_coords **list);
+t_coords       		*sort_list(t_coords *list);
+t_coords    		*node_create(int x, int y, int sum);
 
 #endif
