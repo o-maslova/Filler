@@ -15,8 +15,8 @@
 # define ABS(x) ((x) > 0 ? (x) : -(x))
 # define PLAYER data->player
 # define ENEMY data->enemy
-# include "libft/libft.h"
-#include <stdio.h>
+# include "libft.h"
+# include <stdio.h>
 
 typedef struct		s_point
 {

@@ -1,4 +1,5 @@
 #include "filler.h"
+#include <signal.h>
 
 void	clear_mtrx(t_data *data, int *counter)
 {
@@ -10,37 +11,47 @@ void	clear_mtrx(t_data *data, int *counter)
 	{
 		j = 0;
 		while (j < data->column)
-			data->mtrx[i][j++].length = 0;
+		{
+			data->mtrx[i][j].length = 0;
+			j++;
+		}
 		i++;
 	}
 	*counter = 0;
 }
 
-void	set_distance(t_data *data)
+void	find_min_distance(t_data *data, int dotrow, int dotcol)
 {
-	int i[2];
-	int j[2];
+	int i;
+	int j;
 	int dist;
 
-	i[0] = -1;
-	while (++i[0] < data->row)
+	i = -1;
+	while (++i < data->row)
 	{
-		j[0] = -1;
-		while (++j[0] < data->column)
+		j = -1;
+		while (++j < data->column)
 		{
-			i[1] = -1;
-			while (++i[1] < data->row)
-			{
-				j[1] = -1;
-				while (++j[1] < data->column)
-				{
-					dist = ABS(i[0] - i[1]) + ABS(j[0] - j[1]);
-					if (data->mtrx[i[1]][j[1]].isEnemy && dist < data->mtrx[i[0]][j[0]].length)
-						data->mtrx[i[0]][j[0]].length = dist;
-				}
-			}
+			dist = ABS(dotrow - i) + ABS(dotcol - j);
+			if (data->mtrx[i][j].isEnemy && dist < data->mtrx[dotrow][dotcol].length)
+				data->mtrx[dotrow][dotcol].length = dist;
 		}
-			// find_min_distance(data, i, j);
+	}
+}
+
+void	set_distance(t_data *data)
+{
+	int i;
+	int j;
+
+	i = -1;
+	while (++i < data->row)
+	{
+		j = -1;
+		while (++j < data->column)
+		{
+			find_min_distance(data, i, j);
+		}
 	}
 }
 
@@ -82,8 +93,7 @@ void	get_data(char *line, t_data *data, int fd)
 {
 	char	*str1;
 	char	*str2;
-	int		x;
-	int		y;
+
 	t_coords *list;
 
 	list = NULL;
@@ -91,13 +101,15 @@ void	get_data(char *line, t_data *data, int fd)
 	set_distance(data);
 	print_mtrx(data);
 	search_position(data, list);
+	// if (!list)
+	// {
+	// 	data->coords->x = 0;
+    // 	data->coords->y = 0;
+	// }
 	clear_list(&list);
-	x = data->coords->x;
-	y = data->coords->y;
-
-	str1 = ft_itoa(x);
-	str2 = ft_itoa(y);
-	dprintf(3, "%d %d\n", x, y);
+	str1 = ft_itoa(data->coords->x);
+	str2 = ft_itoa(data->coords->y);
+	dprintf(3, "%d %d\n", data->coords->x, data->coords->y);
 	str1 = ft_strcat(str1, " ");
 	str2 = ft_strcat(str2, "\n");
 	ft_putstr(ft_strcat(str1, str2));
@@ -115,22 +127,24 @@ int main(void)
 	data = (t_data *)malloc(sizeof(t_data));
 	fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
 	i = 0;
+	// raise(SIGTSTP);
+	// signal(SIGPIPE, SIG_IGN);
 	while (get_next_line(0, &line))
 	{
-		if ((ptr = ft_strstr(line, "[./a.out]")))
+		if ((ptr = ft_strstr(line, "[./omaslova.filler]")))
 		{
 			data->player = *(ptr - 4) == '1' ? 'o' + 100 : 'x' + 100;
 			data->enemy = data->player == 'o' + 100 ? 'x' + 100 : 'o' + 100;
 		}
-		if ((ptr = ft_strstr(line, "Plateau")))
+		else if ((ptr = ft_strstr(line, "Plateau")))
 			set_data(line, data);	
-		if ((ptr = ft_strstr(line, "Piece")))
+		else if ((ptr = ft_strstr(line, "Piece")))
 		{
 			get_data(ptr, data, 0);
 			clear_mtrx(data, &i);
 		}
-		if ((ft_strchr(line, '0') && (ptr = ft_strchr(line, '.'))))
-			i = set_mtrx(ptr, data, i);
+		else if (ft_strchr(line, '0') && ft_strchr(line, '.'))
+			i = set_mtrx(line + 4, data, i);
 		free(line);
 	}
 	close(fd);

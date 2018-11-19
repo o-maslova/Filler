@@ -1,17 +1,20 @@
 NAME = omaslova.filler
 LIB = ./libft/libft.a
-FLAGS = -c -Wall -Wextra -Werror
-SRC = ./algorithm.c ./parsing.c ./main.c
+FLAGS = -g -Wall -Wextra -Werror
+SRC = ./algorithm.c ./parsing.c ./main.c ./list_staff.c
 BINS = $(SRC:.c=.o)
+HEADER = ./filler.h
 
-all: $(NAME)
+all: lib $(NAME)
 
-$(NAME): $(BINS)
+lib:
 	make -C libft
+
+$(NAME): $(BINS) $(LIB)
 	gcc -o $(NAME) $(BINS) $(LIB)
 
-%.o : %.c
-	gcc $(FLAGS) -o $@ -c $<
+%.o: %.c $(HEADER)
+	gcc $(FLAGS) -o $@ -c $< -I libft
 
 clean:
 	make clean -C libft
