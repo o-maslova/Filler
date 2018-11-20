@@ -12,11 +12,11 @@
 
 #ifndef FILLER_H
 # define FILLER_H
-# define ABS(x) ((x) > 0 ? (x) : -(x))
+# define ABS(x) ((x) >= 0 ? (x) : -(x))
 # define PLAYER data->player
 # define ENEMY data->enemy
-# include "libft.h"
 # include <stdio.h>
+# include "./ft_printf/ft_printf.h"
 
 typedef struct		s_point
 {
@@ -43,6 +43,7 @@ typedef struct		s_data
 	char			**pc;
 	int				x_pc;
 	int				y_pc;
+	int				firstMinStar[2];
 	t_coords		*coords;
 }					t_data;
 

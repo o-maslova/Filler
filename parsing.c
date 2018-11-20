@@ -8,15 +8,14 @@ int		set_mtrx(char *line, t_data *data, int i)
 	//dprintf(3, "i = %d", i);
 	while (j < data->column)
 	{
-		dprintf(3, "%c", *line);
-		*line = ft_tolower(*line);
-		data->mtrx[i][j].length = 255; //(unsigned char)*line++;
-		// dprintf(3, "%c", *line);
-		if (*line + 100 == data->player)
+		dprintf(3, "%c", line[j]);
+		line[j] = ft_tolower(line[j]);
+		data->mtrx[i][j].length = 255; //(unsigned char)line[j]++;
+		// dprintf(3, "%c", line[j]);
+		if (line[j] + 100 == data->player)
 			data->mtrx[i][j].isPlayer = 1;
-		if (*line + 100 == data->enemy)
+		if (line[j] + 100 == data->enemy)
 			data->mtrx[i][j].isEnemy = 1;
-		++line;
 		++j;
 	}
 	dprintf(3, "\n");
