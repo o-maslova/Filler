@@ -10,31 +10,6 @@ Each player has for the purpose of placing as many pieces as possible while atte
 his opponent from doing the same.
 At the end of the game, the one with the most points wins the match...
 
-FOR EXAMPLE:
-........................................      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-........................................      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-........................................      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-...O....................................      XXXOOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-........................................      XXXXOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-........................................      XXXXOOXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-........................................      XXXXOOOXXXXXXXXXXXXXXXXXXXXXXOOOOXXXXXXX
-........................................      XXXXX.OXXXXXXXXXXXXXXOOXOOOXXOOOOX.XXXXX
-........................................      XX.XXXOXXXXXXXXOOOOOOOOOOOOOOOOOOOOOOXXX
-........................................      .XXXXXOOXXXXXXXXOOOOOOOOOOOOOOOOOOOOXXOO
-........................................      ..XXXXOOXOOOOOOXXOOOOOOOOOOOOOOOOOOOOOOO
-........................................      .XXXoooOOOOOOOOOXOOXOOOOOOOOOOOOOOOOOOO.
-........................................      .XXXOOOOOOOOOOOOXXXXOOOOOOOOOOOOOOOOOOOO
-........................................      ...OOOOOOOOOOOOOOOOXXOOOOOOOOOOOOOOOOOOO
-........................................      ..OOOOOOOOOOOOOOOOOOXXOOOOOOOOOOOOOOOOOO
-........................................      ....OOOOOOOOOOOOOOOOXXXOOOOOOOOOOOOOOOOO
-........................................      ....OOOOOOOOOOOOOOOOOOXXXXXXXOOOOOOOOOOO
-........................................      ..OOOOOOOOOOOOOOOOOOOOOOOOOXXOOOOOOOOOOO
-........................................      ..OOOOOOOOOOOOOOOOOOOOOOOOOOXXOOOOOOOOOO
-................................X.......      ..OOOOOOOOOOOOOOOOOOOOOOOOOOXXXXXOOOOOOO
-........................................      ..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-........................................      ..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.
-........................................      ...OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.
-........................................      ....OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.
 
 The project contain the folder 'resources', where the virtual machine which generates the pieces to set is.
 In that folder also exist the folder 'players', where the opponent players are, and the folder 'maps',
