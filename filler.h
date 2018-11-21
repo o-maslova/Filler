@@ -12,17 +12,18 @@
 
 #ifndef FILLER_H
 # define FILLER_H
+# include "./ft_printf/ft_printf.h"
 # define ABS(x) ((x) >= 0 ? (x) : -(x))
 # define PLAYER data->player
 # define ENEMY data->enemy
-# include <stdio.h>
-# include "./ft_printf/ft_printf.h"
+# define ROW data->row
+# define COLUMN data->column
 
 typedef struct		s_point
 {
 	unsigned char	length;
-	int				isPlayer;
-	int				isEnemy;
+	int				is_player;
+	int				is_enemy;
 }					t_point;
 
 typedef struct		s_coords
@@ -43,20 +44,21 @@ typedef struct		s_data
 	char			**pc;
 	int				x_pc;
 	int				y_pc;
-	int				firstMinStar[2];
+	int				star_row;
+	int				star_col;
+	int				star_amount;
 	t_coords		*coords;
 }					t_data;
 
-int					algorithm(t_data *data, int row, int col, int res);
-t_coords			*star_min_dist(t_data *data, int row, int col, t_coords *nw);
-void				search_position(t_data *data, t_coords *list);
+void				search_position(t_data *data, t_coords **list);
 int					set_mtrx(char *line, t_data *data, int i);
-void				set_data(char *line, t_data *data);
-void				get_pc(char *str, t_data *data, int fd);
-void       			print_sum(t_coords *list);
-void       			add_node(t_coords **list, t_coords *new_node);
-void				clear_list(t_coords **list);
-t_coords       		*sort_list(t_coords *list);
-t_coords    		*node_create(int x, int y, int sum);
+void				set_data(char **line, t_data *data);
+void				get_pc(char *str, t_data *data);
+void				clear_list(t_coords *list);
+void				clear_mtrx(t_data *data, int *counter);
+void				ft_mtrxdel(t_point **arr, int row);
+void				add_node(t_coords **list, t_coords *new_node);
+t_coords			*sort_list(t_coords *list);
+t_coords			*node_create(int x, int y, int sum);
 
 #endif

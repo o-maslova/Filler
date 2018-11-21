@@ -1,43 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/11/21 14:52:24 by omaslova          #+#    #+#             */
+/*   Updated: 2018/11/21 14:52:27 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "filler.h"
 
 int		set_mtrx(char *line, t_data *data, int i)
 {
 	int j;
-	
+
 	j = 0;
-	//dprintf(3, "i = %d", i);
-	while (j < data->column)
+	while (j < COLUMN)
 	{
-		dprintf(3, "%c", line[j]);
 		line[j] = ft_tolower(line[j]);
-		data->mtrx[i][j].length = 255; //(unsigned char)line[j]++;
-		// dprintf(3, "%c", line[j]);
-		if (line[j] + 100 == data->player)
-			data->mtrx[i][j].isPlayer = 1;
-		if (line[j] + 100 == data->enemy)
-			data->mtrx[i][j].isEnemy = 1;
+		data->mtrx[i][j].length = 255;
+		if (line[j] + 100 == PLAYER)
+			data->mtrx[i][j].is_player = 1;
+		if (line[j] + 100 == ENEMY)
+			data->mtrx[i][j].is_enemy = 1;
 		++j;
 	}
-	dprintf(3, "\n");
 	return (++i);
 }
 
-void	set_data(char *line, t_data *data)
+void	memory_allocate(char *line, t_data *data)
 {
 	int i;
 
 	i = 0;
 	line += 8;
-	data->row = ft_atoi(line);
-	line += ft_digitnum(data->row);
-	data->column = ft_atoi(line);
-	data->mtrx = (t_point **)ft_memalloc(sizeof(t_point *) * data->row);
-	while (i < data->row)
-		data->mtrx[i++] = (t_point *)ft_memalloc(sizeof(t_point) * data->column);
-	dprintf(3, "player = %d, row = %d, column = %d\n", data->player, data->row, data->column);
+	ROW = ft_atoi(line);
+	line += ft_digitnum(ROW);
+	COLUMN = ft_atoi(line);
+	data->mtrx = (t_point **)ft_memalloc(sizeof(t_point *) * ROW);
+	while (i < ROW)
+		data->mtrx[i++] = (t_point *)ft_memalloc(sizeof(t_point) * COLUMN);
 }
 
-void	get_pc(char *str, t_data *data, int fd)
+void	set_data(char **line, t_data *data)
+{
+	static int i;
+
+	if (i == 0)
+	{
+		memory_allocate(*line, data);
+		++i;
+	}
+	free(*line);
+	get_next_line(0, line);
+}
+
+void	get_pc(char *str, t_data *data)
 {
 	int		i;
 	char	*line;
@@ -48,11 +68,10 @@ void	get_pc(char *str, t_data *data, int fd)
 	data->pc = (char **)ft_memalloc(sizeof(char *) * data->x_pc);
 	while (i < data->x_pc)
 	{
-		get_next_line(fd, &line);
+		get_next_line(0, &line);
 		data->pc[i] = (char *)ft_memalloc(sizeof(char) * data->y_pc);
 		data->pc[i] = ft_strncpy(data->pc[i], line, data->y_pc);
 		i++;
 		free(line);
 	}
-	dprintf(3, "pc_x = %d, pc_y = %d\n", data->x_pc, data->y_pc);
 }

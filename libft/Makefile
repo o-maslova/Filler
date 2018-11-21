@@ -10,7 +10,11 @@
 #                                                                              #
 #******************************************************************************#
 
+NAME = libft.a
+
 CC = gcc
+
+HEADER = ./libft.h
 
 SRC = ./ft_memset.c \
 		./ft_bzero.c \
@@ -76,25 +80,40 @@ SRC = ./ft_memset.c \
 		./ft_lst_swap.c \
 		./ft_sqrt.c \
 		./ft_digitnum.c \
-		./get_next_line.c
+		./get_next_line.c \
+		./ft_arrdel.c
 
+PRINTF_SRC = ./ft_printf/cast.c \
+			./ft_printf/extra_fun.c \
+			./ft_printf/ft_itoa_base.c \
+			./ft_printf/ft_printf.c \
+			./ft_printf/integer.c \
+			./ft_printf/o_and_x.c \
+			./ft_printf/output.c \
+			./ft_printf/parsing.c \
+			./ft_printf/string.c \
+			./ft_printf/uinteger.c \
+			./ft_printf/unicode.c
 
-NAME = libft.a
+PRINTF_HEADER = ./ft_printf/ft_printf.h
 
 FLAGS = -Wall -Wextra -Werror
 
 OBJ = $(SRC:.c=.o)
 
+OBJ_PRINTF = $(PRINTF_SRC:.c=.o)
+
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ) 
+$(NAME): $(OBJ) $(OBJ_PRINTF)
+	ar rc $(NAME) $(OBJ) $(OBJ_PRINTF)
 
-%.o : %.c
+%.o: %.c $(HEADER) $(PRINTF_HEADER)
 	$(CC) $(FLAGS) -o $@ -c $< -I./
 
 clean:
-	/bin/rm -f $(OBJ)
+	/bin/rm -f $(OBJ) $(OBJ_PRINTF)
+	/bin/rm -f *~
 
 fclean: clean
 	/bin/rm -f $(NAME)
