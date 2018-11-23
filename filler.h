@@ -12,7 +12,8 @@
 
 #ifndef FILLER_H
 # define FILLER_H
-# include "./ft_printf/ft_printf.h"
+# include <stdio.h>
+# include "./libft/ft_printf/ft_printf.h"
 # define ABS(x) ((x) >= 0 ? (x) : -(x))
 # define PLAYER data->player
 # define ENEMY data->enemy
