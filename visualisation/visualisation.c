@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   visualisation.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/11/24 13:59:54 by omaslova          #+#    #+#             */
+/*   Updated: 2018/11/24 13:59:55 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "view.h"
 
 void	pixel_put_img(t_win *win, int x, int y, int colour)
@@ -24,7 +36,7 @@ void	draw_square(t_win *win, int row, int column, int color)
 		j = j_cell + 1;
 		while (j < j_cell + CELL_SIZE - 1)
 		{
-			pixel_put_img(win, i + PAD, j + PAD, color);
+			pixel_put_img(win, i + PAD, j + PAD + (CELL_SIZE * VAL), color);
 			++j;
 		}
 		++i;
@@ -32,7 +44,7 @@ void	draw_square(t_win *win, int row, int column, int color)
 }
 
 void	draw_matrix(t_win *win)
-{	
+{
 	int i;
 	int j;
 
@@ -43,14 +55,13 @@ void	draw_matrix(t_win *win)
 		while (j < VIEW_COLUMN)
 		{
 			if (win->matrix[i][j] == g_player)
-				draw_square(win, j, i, 0x00FF00);
+				draw_square(win, j, i, 0xF68A41);
 			else if (win->matrix[i][j] == g_enemy)
-				draw_square(win, j, i, 0xFF0000);
+				draw_square(win, j, i, 0x859A14);
 			++j;
 		}
 		++i;
 	}
-	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
 }
 
 void	continue_draw(t_win *win, int i, int j)
@@ -66,14 +77,17 @@ void	continue_draw(t_win *win, int i, int j)
 		{
 			while (j_cell <= j + CELL_SIZE)
 			{
-				pixel_put_img(win, i_cell + PAD, j_cell + PAD, 0xFFFFFF);
+				pixel_put_img(win, i_cell + PAD,
+				j_cell + PAD + (CELL_SIZE * VAL), 0xFFFFFF);
 				++j_cell;
 			}
 		}
 		else
 		{
-			pixel_put_img(win, i_cell + PAD, j_cell + PAD, 0xFFFFFF);
-			pixel_put_img(win, i_cell + PAD, j + CELL_SIZE + PAD, 0xFFFFFF);
+			pixel_put_img(win, i_cell + PAD,
+			j_cell + PAD + (CELL_SIZE * VAL), 0xFFFFFF);
+			pixel_put_img(win, i_cell + PAD,
+			j + CELL_SIZE + PAD + (CELL_SIZE * VAL), 0xFFFFFF);
 		}
 		++i_cell;
 	}
@@ -85,16 +99,19 @@ void	draw_field(t_win *win)
 	int j;
 
 	i = 0;
-	draw_players(win);
-	while (i < VIEW_COLUMN * 48)
+	while (i < VIEW_COLUMN * CELL_SIZE)
 	{
 		j = 0;
-		while (j < VIEW_ROW * 48)
+		while (j < VIEW_ROW * CELL_SIZE)
 		{
 			continue_draw(win, i, j);
 			j += CELL_SIZE;
 		}
 		i += CELL_SIZE;
 	}
+	draw_matrix(win);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+	draw_players(win);
+	mlx_string_put(win->mlx_ptr, win->win_ptr, WIDTH - 200, 30,
+	0xFF0000, "Press ESC to quit");
 }

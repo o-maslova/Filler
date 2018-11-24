@@ -9,6 +9,7 @@ all: lib $(NAME)
 
 lib:
 	make -C libft
+	make -C visualisation
 
 $(NAME): $(BINS) $(LIB)
 	gcc -o $(NAME) $(BINS) $(LIB)
@@ -18,11 +19,13 @@ $(NAME): $(BINS) $(LIB)
 
 clean:
 	make clean -C libft
+	make clean -C visualisation
 	/bin/rm -f $(BINS)
 	/bin/rm -f *~
 
 fclean: clean
 	make fclean -C libft
+	make fclean -C visualisation
 	/bin/rm -f $(NAME)
 
 re: fclean all
